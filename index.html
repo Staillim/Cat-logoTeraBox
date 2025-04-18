@@ -167,5 +167,15 @@
         recientes = [...data].sort((a,b) => b.ID - a.ID).slice(0,5);
       });
   </script>
+  <!-- Desactivar clic derecho y algunas teclas -->
+<script>
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("keydown", e => {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+      e.preventDefault();
+    }
+  });
+</script>
+<script src="js/main.js"></script>
 </body>
 </html>
