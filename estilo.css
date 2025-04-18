@@ -86,7 +86,8 @@ a {
   a:hover h3 {
     color: #ffcc00; /* o el color que tú quieras al hacer hover */
   }
-  .contenedor, .carrusel {
+  /* Contenedor general */
+.contenedor {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -94,53 +95,36 @@ a {
   padding: 20px;
 }
 
+/* Cada tarjeta ocupa 200px de base, pero puede encoger o crecer */
 .tarjeta {
-  width: 180px;
-  background-color: #222;
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: center;
-  transition: transform 0.2s;
-  cursor: pointer;
+  flex: 1 1 200px;
+  max-width: 200px;
 }
 
-.tarjeta:hover {
-  transform: scale(1.05);
+/* Carrusel: mantenemos alto fijo y scroll horizontal */
+.carrusel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding: 10px;
+}
+.carrusel::-webkit-scrollbar {
+  display: none;
 }
 
-.tarjeta img {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-}
-
-.tarjeta h3 {
-  margin: 10px 0;
-  font-size: 16px;
-  color: white;
-}
-
-/* RESPONSIVE */
+/* RESPONSIVE: en pantallas hasta 600px, 2 columnas */
 @media (max-width: 600px) {
   .tarjeta {
-    width: 140px;
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
   }
+}
 
-  .tarjeta img {
-    height: 200px;
-  }
-
-  .tarjeta h3 {
-    font-size: 14px;
-  }
-
-  input[type="text"] {
-    width: 90%;
-  }
-
-  #filtros button {
-    margin: 2px;
-    padding: 6px;
-    font-size: 14px;
+/* RESPONSIVE: en pantallas hasta 400px, 1 columna */
+@media (max-width: 400px) {
+  .tarjeta {
+    flex: 1 1 calc(100% - 20px);
+    max-width: calc(100% - 20px);
   }
 }
