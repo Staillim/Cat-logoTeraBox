@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catálogo TeraBox</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <h1>Catálogo TeraBox</h1>
+
+  <!-- BUSCADOR -->
+  <div style="text-align:center; margin: 10px;">
+    <input type="text" id="busqueda" placeholder="Buscar película por nombre" style="padding:8px; width: 300px;">
+  </div>
+
+  <!-- FILTROS DE GÉNERO -->
+  <div id="filtros" style="text-align:center; margin: 10px;"></div>
+
+  <!-- CARRUSEL RECIENTES -->
+  <div id="seccionRecientes">
+    <h2 style="text-align:center;">🎬 Recientes</h2>
+    <div class="carrusel" id="recientes" style="display: flex; overflow-x: auto; scroll-behavior: smooth;"></div>
+  </div>
+
+  <!-- CATÁLOGO GENERAL -->
+  <h2 style="text-align:center;">📺 Todo el catálogo</h2>
+  <div class="contenedor" id="catalogo" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+
+  <script>
+    let todasLasPeliculas = [];
+    let generoSeleccionado = '';
+    let textoBusqueda = '';
+    let intervaloCarrusel;
+
+    function renderizarPeliculas(lista, contenedorId) {
+      const contenedor = document.getElementById(contenedorId);
+      contenedor.innerHTML = '';
+      lista.forEach(pelicula => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta';
+        tarjeta.style = 'margin: 10px; text-align: center;';
+        tarjeta.innerHTML = `
+          <a href="pelicula.html?id=${pelicula.ID}">
+            <img src="${pelicula.IMG}" alt="${pelicula.NOMBRE}" style="width: 150px; height: 220px; object-fit: cover;">
+            <h3>${pelicula.NOMBRE}</h3>
+          </a>
+        `;
+        contenedor.appendChild(tarjeta);
+      });
+    }
+
+    function crearFiltros(peliculas) {
+      const contenedor = document.getElementById('filtros');
+      const generosSet = new Set();
+
+      peliculas.forEach(p => {
+        const generos = p.GENERO.split('/').map(g => g.trim());
+        generos.forEach(g => generosSet.add(g));
+      });
+
+      const generosUnicos = Array.from(generosSet);
+      contenedor.innerHTML = '<button data-genero="">Todos</button> ';
+      generosUnicos.forEach(genero => {
+        const boton = document.createElement('button');
+        boton.textContent = genero;
+        boton.setAttribute('data-genero', genero);
+        contenedor.appendChild(boton);
+      });
+
+      contenedor.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          generoSeleccionado = btn.getAttribute('data-genero');
+          aplicarFiltros();
+        });
+      });
+    }
+
+    function aplicarFiltros() {
+      const listaFiltrada = todasLasPeliculas.filter(p => {
+        const nombreCoincide = p.NOMBRE.toLowerCase().includes(textoBusqueda);
+        const generos = p.GENERO.split('/').map(g => g.trim().toLowerCase());
+        const generoCoincide = !generoSeleccionado || generos.includes(generoSeleccionado.toLowerCase());
+        return nombreCoincide && generoCoincide;
+      });
+
+      // Ocultar carrusel si hay búsqueda o filtro
+      const seccionRecientes = document.getElementById('seccionRecientes');
+      if (textoBusqueda || generoSeleccionado) {
+        seccionRecientes.style.display = 'none';
+        clearInterval(intervaloCarrusel); // detiene el scroll automático
+      } else {
+        seccionRecientes.style.display = 'block';
+        iniciarCarrusel();
+      }
+
+      renderizarPeliculas(listaFiltrada, 'catalogo');
+    }
+
+    document.getElementById("busqueda").addEventListener("input", function () {
+      textoBusqueda = this.value.toLowerCase();
+      aplicarFiltros();
+    });
+
+    function iniciarCarrusel() {
+      clearInterval(intervaloCarrusel); // por si ya había uno andando
+      intervaloCarrusel = setInterval(() => {
+        const carrusel = document.getElementById('recientes');
+        carrusel.scrollLeft += 220;
+        if (carrusel.scrollLeft + carrusel.clientWidth >= carrusel.scrollWidth) {
+          carrusel.scrollLeft = 0;
+        }
+      }, 3000);
+    }
+
+    fetch('https://raw.githubusercontent.com/Staillim/Mybase/main/base2.json')
+      .then(res => res.json())
+      .then(data => {
+        todasLasPeliculas = data;
+
+        crearFiltros(todasLasPeliculas);
+        aplicarFiltros();
+
+        // Películas recientes
+        const recientes = [...todasLasPeliculas].sort((a, b) => b.ID - a.ID).slice(0, 5);
+        renderizarPeliculas(recientes, 'recientes');
+        iniciarCarrusel();
+      });
+  </script>
+</body>
+</html>

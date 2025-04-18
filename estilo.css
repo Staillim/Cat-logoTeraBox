@@ -1,0 +1,89 @@
+body {
+    background-color: #141414;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  .contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .carrusel {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px;
+    scroll-behavior: smooth;
+  }
+  .carrusel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .tarjeta {
+    width: 200px;
+    background-color: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .tarjeta:hover {
+    transform: scale(1.05);
+  }
+  .tarjeta img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  .tarjeta h3 {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  #filtros button {
+    background-color: #333;
+    color: white;
+    border: none;
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #filtros button:hover {
+    background-color: #555;
+  }
+  
+  input#busqueda {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  /* Quitar color azul y subrayado de los enlaces */
+a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  /* También puedes asegurarte de que los h3 dentro del enlace no cambien */
+  a h3 {
+    color: white;
+    text-decoration: none;
+  }
+  
+  /* (Opcional) si quieres que cambien un poco al pasar el mouse */
+  a:hover h3 {
+    color: #ffcc00; /* o el color que tú quieras al hacer hover */
+  }
+  
