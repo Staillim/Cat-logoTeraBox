@@ -86,41 +86,93 @@ a {
   a:hover h3 {
     color: #ffcc00; /* o el color que tú quieras al hacer hover */
   }
-  /* Contenedor general del catálogo */
-.contenedor {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Cada tarjeta ocupa 200px de base, pero puede ajustarse dependiendo del espacio */
-.tarjeta {
-  flex: 1 1 200px;
-  max-width: 200px;
-}
-
-/* RESPONSIVE: en pantallas hasta 768px (tabletas), 3 tarjetas por fila */
-@media (max-width: 768px) {
-  .tarjeta {
-    flex: 1 1 calc(33.33% - 20px);
-    max-width: calc(33.33% - 20px);
+  /* CATÁLOGO GENERAL */
+#catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
   }
-}
-
-/* RESPONSIVE: en pantallas hasta 600px (móviles), 2 tarjetas por fila */
-@media (max-width: 600px) {
-  .tarjeta {
-    flex: 1 1 calc(50% - 20px);
-    max-width: calc(50% - 20px);
+  
+  /* Tarjetas pequeñas */
+  #catalogo .tarjeta {
+    background-color: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    flex: 1 1 calc(12.5% - 6px); /* Hasta 8 por fila */
+    max-width: calc(12.5% - 6px);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-}
+  
+  /* Imagen centrada */
 
-/* RESPONSIVE: en pantallas hasta 400px (pantallas muy pequeñas), 1 tarjeta por fila */
-@media (max-width: 400px) {
-  .tarjeta {
-    flex: 1 1 calc(100% - 20px);
-    max-width: calc(100% - 20px);
+  
+  /* Título pequeño */
+  #catalogo .tarjeta h3 {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: white;
   }
-}
+  
+  /* Quitar estilo azul del link */
+  #catalogo .tarjeta a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  /* Hover */
+  #catalogo .tarjeta:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+  }
+  
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    #catalogo .tarjeta {
+      flex: 1 1 calc(14.28% - 6px); /* 7 por fila */
+      max-width: calc(14.28% - 6px);
+    }
+  }
+  
+  @media (max-width: 892px) {
+    #catalogo .tarjeta {
+      flex: 1 1 calc(20% - 6px); /* 5 por fila */
+      max-width: calc(20% - 6px);
+    }
+  }
+  
+  @media (max-width: 668px) {
+    #catalogo .tarjeta {
+      flex: 1 1 calc(25% - 6px); /* 4 por fila */
+      max-width: calc(25% - 6px);
+    }
+  }
+  
+  @media (max-width: 476px) {
+    #catalogo .tarjeta {
+      flex: 1 1 calc(33.33% - 6px); /* 3 por fila */
+      max-width: calc(33.33% - 6px);
+    }
+  }
+  
+  @media (max-width: 300px) {
+    #catalogo .tarjeta {
+      flex: 1 1 calc(50% - 6px); /* 2 por fila */
+      max-width: calc(50% - 6px);
+    }
+  }
+  /* Imagen centrada y más pequeña sin recortar */
+#catalogo .tarjeta img {
+    width: 90%; /* Puedes bajarlo más si la quieres aún más pequeña */
+    height: auto;
+    display: block;
+    border-radius: 4px;
+  }
+  
