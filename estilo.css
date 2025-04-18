@@ -1,201 +1,228 @@
 body {
-    background-color: #141414;
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1, h2 {
-    text-align: center;
-  }
-  
-  .contenedor {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  /* === CARRUSEL === */
-  .carrusel {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 20px;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    perspective: 1000px;
-    background: linear-gradient(to right, #111, #1a1a1a);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-  .carrusel::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .carrusel .tarjeta {
-    width: 200px;
-    background-color: #222;
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    scroll-snap-align: center;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    transform-origin: center center;
-  }
-  
-  .carrusel .tarjeta img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-  }
-  
-  .carrusel .tarjeta h3 {
-    margin: 10px 0;
-    font-size: 16px;
-  }
-  
-  /* === EFECTO DE ZOOM EN EL CENTRO === */
-  .carrusel {
-    scroll-padding: 50%;
-  }
-  
-  .carrusel .tarjeta {
-    transform: scale(0.9);
-    opacity: 0.7;
-  }
-  
-  .carrusel .tarjeta:has(+ .tarjeta:hover),
-  .carrusel .tarjeta:hover {
-    transform: scale(1.05);
-    opacity: 1;
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Script adicional para mejorar efecto centrado */
-  @keyframes pop {
-    0% { transform: scale(0.9); }
-    100% { transform: scale(1.1); }
-  }
-  
-  /* === RESTO DE ESTILOS === */
-  #filtros button {
-    background-color: #333;
-    color: white;
-    border: none;
-    margin: 5px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  #filtros button:hover {
-    background-color: #555;
-  }
-  
-  input#busqueda {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  a {
-    text-decoration: none;
-    color: white;
-  }
-  
-  a h3 {
-    color: white;
-    text-decoration: none;
-  }
-  
-  a:hover h3 {
-    color: #ffcc00;
-  }
-  
-  /* CATÁLOGO GENERAL */
-  #catalogo {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px;
-  }
-  
+  font-family: Arial, sans-serif;
+  /* un gris muy oscuro con un matiz azulado */
+  background: linear-gradient(90deg, #1e1e1e 0%, hsl(0, 74%, 15%) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f2f2f2;
+  text-align: center;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* === CARRUSEL === */
+.carrusel {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 20px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  perspective: 1000px;
+  background: linear-gradient(to right, #111, #1a1a1a);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+.carrusel::-webkit-scrollbar {
+  display: none;
+}
+
+.carrusel .tarjeta {
+  width: 200px;
+  background: none; /* Fondo transparente */
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transform-origin: center center;
+}
+
+.carrusel .tarjeta img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.carrusel .tarjeta h3 {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* === EFECTO DE ZOOM EN EL CENTRO === */
+.carrusel {
+  scroll-padding: 50%;
+}
+
+.carrusel .tarjeta {
+  transform: scale(0.9);
+  opacity: 0.7;
+}
+
+.carrusel .tarjeta:has(+ .tarjeta:hover),
+.carrusel .tarjeta:hover {
+  transform: scale(1.05);
+  opacity: 1;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Script adicional para mejorar efecto centrado */
+@keyframes pop {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1.1); }
+}
+
+/* === RESTO DE ESTILOS === */
+#filtros button {
+  background-color: #333;
+  color: white;
+  border: none;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#filtros button:hover {
+  background-color: #555;
+}
+
+input#busqueda {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a h3 {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover h3 {
+  color: #ffcc00;
+}
+
+/* CATÁLOGO GENERAL */
+#catalogo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+}
+
+#catalogo .tarjeta {
+  background: none; /* Fondo transparente */
+  border-radius: 6px;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  flex: 1 1 calc(12.5% - 6px);
+  max-width: calc(12.5% - 6px);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#catalogo .tarjeta h3 {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: white;
+}
+
+#catalogo .tarjeta a {
+  text-decoration: none;
+  color: white;
+}
+
+#catalogo .tarjeta:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
   #catalogo .tarjeta {
-    background-color: #222;
-    border-radius: 6px;
-    overflow: hidden;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    flex: 1 1 calc(12.5% - 6px);
-    max-width: calc(12.5% - 6px);
-    padding: 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #catalogo .tarjeta h3 {
-    margin: 4px 0 0;
-    font-size: 11px;
-    color: white;
-  }
-  
-  #catalogo .tarjeta a {
-    text-decoration: none;
-    color: white;
-  }
-  
-  #catalogo .tarjeta:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
-  }
-  
-  /* RESPONSIVE */
-  @media (max-width: 1100px) {
-    #catalogo .tarjeta {
       flex: 1 1 calc(14.28% - 6px);
       max-width: calc(14.28% - 6px);
-    }
   }
-  
-  @media (max-width: 892px) {
-    #catalogo .tarjeta {
+}
+
+@media (max-width: 892px) {
+  #catalogo .tarjeta {
       flex: 1 1 calc(20% - 6px);
       max-width: calc(20% - 6px);
-    }
   }
-  
-  @media (max-width: 668px) {
-    #catalogo .tarjeta {
+}
+
+@media (max-width: 668px) {
+  #catalogo .tarjeta {
       flex: 1 1 calc(25% - 6px);
       max-width: calc(25% - 6px);
-    }
   }
-  
-  @media (max-width: 476px) {
-    #catalogo .tarjeta {
+}
+
+@media (max-width: 476px) {
+  #catalogo .tarjeta {
       flex: 1 1 calc(33.33% - 6px);
       max-width: calc(33.33% - 6px);
-    }
   }
-  
-  @media (max-width: 300px) {
-    #catalogo .tarjeta {
+}
+
+@media (max-width: 300px) {
+  #catalogo .tarjeta {
       flex: 1 1 calc(50% - 6px);
       max-width: calc(50% - 6px);
-    }
   }
-  
-  #catalogo .tarjeta img {
-    width: 90%;
-    height: auto;
-    display: block;
-    border-radius: 4px;
-  }
-  
+}
+
+#catalogo .tarjeta img {
+  width: 90%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+.pelicula {
+  background: none; /* Sin fondo */
+  box-shadow: none; /* Sin sombra */
+  border: none; /* Sin bordes */
+  text-align: center;
+  border-radius: 0;
+  padding: 10px;
+  transition: transform 0.2s;
+}
+
+.pelicula:hover {
+  transform: scale(1.05); /* efecto al pasar el mouse */
+}
+
+.pelicula img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.pelicula h3 {
+  margin-top: 8px;
+  color: white;
+  font-size: 16px;
+}
