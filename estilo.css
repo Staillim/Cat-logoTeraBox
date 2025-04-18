@@ -86,7 +86,7 @@ a {
   a:hover h3 {
     color: #ffcc00; /* o el color que tú quieras al hacer hover */
   }
-  /* Contenedor general */
+  /* Contenedor general del catálogo */
 .contenedor {
   display: flex;
   flex-wrap: wrap;
@@ -95,25 +95,21 @@ a {
   padding: 20px;
 }
 
-/* Cada tarjeta ocupa 200px de base, pero puede encoger o crecer */
+/* Cada tarjeta ocupa 200px de base, pero puede ajustarse dependiendo del espacio */
 .tarjeta {
   flex: 1 1 200px;
   max-width: 200px;
 }
 
-/* Carrusel: mantenemos alto fijo y scroll horizontal */
-.carrusel {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: 20px;
-  padding: 10px;
-}
-.carrusel::-webkit-scrollbar {
-  display: none;
+/* RESPONSIVE: en pantallas hasta 768px (tabletas), 3 tarjetas por fila */
+@media (max-width: 768px) {
+  .tarjeta {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+  }
 }
 
-/* RESPONSIVE: en pantallas hasta 600px, 2 columnas */
+/* RESPONSIVE: en pantallas hasta 600px (móviles), 2 tarjetas por fila */
 @media (max-width: 600px) {
   .tarjeta {
     flex: 1 1 calc(50% - 20px);
@@ -121,7 +117,7 @@ a {
   }
 }
 
-/* RESPONSIVE: en pantallas hasta 400px, 1 columna */
+/* RESPONSIVE: en pantallas hasta 400px (pantallas muy pequeñas), 1 tarjeta por fila */
 @media (max-width: 400px) {
   .tarjeta {
     flex: 1 1 calc(100% - 20px);
