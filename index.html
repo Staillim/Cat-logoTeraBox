@@ -6,6 +6,18 @@
   <title>Catálogo TeraBox</title>
   <link rel="stylesheet" href="estilo.css">
   <style>
+    /* ================= Estilos Generales ================= */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
     /* ================= Banner Slider ================= */
     #banner {
       position: relative;
@@ -13,6 +25,7 @@
       height: 250px;
       overflow: hidden;
       margin-bottom: 10px;
+      z-index: 1;
     }
     #banner a {
       display: block;
@@ -22,28 +35,27 @@
       top: 0;
       left: 0;
       text-decoration: none;
+      display: none;
+    }
+    #banner a.active {
+      display: block;
     }
     #banner img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-    }
-    #banner img.active {
-      opacity: 1;
     }
 
-    /* ================= Sección Estrenos ================= */
-    #estrenos {
+    /* ================= Estilos Comunes para Secciones de Películas ================= */
+    .movie-section {
       margin: 15px 0;
     }
-    #estrenos h2 {
+    .movie-section h2 {
       font-size: 1.2rem;
       margin: 10px;
       color: #fff;
     }
-    #estrenos-container {
+    .movie-container {
       display: flex;
       overflow-x: auto;
       flex-wrap: nowrap;
@@ -52,10 +64,10 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    #estrenos-container::-webkit-scrollbar {
+    .movie-container::-webkit-scrollbar {
       display: none;
     }
-    #estrenos-container .movie-card {
+    .movie-card {
       background: none;
       border-radius: 6px;
       overflow: hidden;
@@ -63,32 +75,25 @@
       transition: transform 0.2s;
       flex: 0 0 auto;
       width: 150px;
+      display: flex;
+      flex-direction: column;
     }
-    #estrenos-container .movie-card:hover {
+    .movie-card:hover {
       transform: scale(1.05);
     }
-    #estrenos-container .movie-card img {
+    .movie-card img {
       width: 100%;
       height: 220px;
       object-fit: cover;
     }
-    #estrenos-container .movie-card .info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 5px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    #estrenos-container .movie-card .info h4 {
-      margin: 0;
+    .movie-card h4 {
+      margin: 5px 0 0;
       font-size: 0.9rem;
       color: #fff;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      text-align: center;
+      text-shadow: -2px -2px 4px #000, 2px -2px 4px #000, -2px 2px 4px #000, 2px 2px 4px #000;
     }
-    #estrenos-container .type-badge {
+    .type-badge {
       position: absolute;
       top: 5px;
       left: 5px;
@@ -100,209 +105,13 @@
       font-weight: bold;
     }
 
-    /* ================= Sección Agregado Recientemente ================= */
-    #recently-added-section {
-      margin: 15px 0;
-    }
-    #recently-added-section h2 {
-      font-size: 1.2rem;
-      margin: 10px;
-      color: #fff;
-    }
-    #recently-added-container {
-      display: flex;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      gap: 8px;
-      padding: 0 10px;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    #recently-added-container::-webkit-scrollbar {
-      display: none;
-    }
+    /* ================= Ajustes Específicos para Recently Added ================= */
     #recently-added-container .movie-card {
-      background: none;
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.2s;
-      flex: 0 0 auto;
       width: 120px;
     }
-    #recently-added-container .movie-card:hover {
-      transform: scale(1.05);
-    }
     #recently-added-container .movie-card img {
-      width: 100%;
       height: 180px;
       object-fit: contain;
-    }
-    #recently-added-container .movie-card .info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 5px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    #recently-added-container .movie-card .info h4 {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #fff;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    }
-    #recently-added-container .type-badge {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background: rgba(0, 102, 204, 0.7);
-      color: white;
-      padding: 3px 6px;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    /* ================= Sección Series ================= */
-    #series {
-      margin: 15px 0;
-    }
-    #series h2 {
-      font-size: 1.2rem;
-      margin: 10px;
-      color: #fff;
-    }
-    #series-container {
-      display: flex;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      gap: 12px;
-      padding: 0 10px;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    #series-container::-webkit-scrollbar {
-      display: none;
-    }
-    #series-container .movie-card {
-      background: none;
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.2s;
-      flex: 0 0 auto;
-      width: 150px;
-    }
-    #series-container .movie-card:hover {
-      transform: scale(1.05);
-    }
-    #series-container .movie-card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
-    #series-container .movie-card .info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 5px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    #series-container .movie-card .info h4 {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #fff;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    }
-    #series-container .type-badge {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background: rgba(0, 102, 204, 0.7);
-      color: white;
-      padding: 3px 6px;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    /* ================= Nuevos Carruseles (Aventura, Acción, Comedia, Terror) ================= */
-    #aventura, #accion, #comedia, #terror {
-      margin: 15px 0;
-    }
-    #aventura h2, #accion h2, #comedia h2, #terror h2 {
-      font-size: 1.2rem;
-      margin: 10px;
-      color: #fff;
-    }
-    #aventura-container, #accion-container, #comedia-container, #terror-container {
-      display: flex;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      gap: 12px;
-      padding: 0 10px;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    #aventura-container::-webkit-scrollbar, #accion-container::-webkit-scrollbar,
-    #comedia-container::-webkit-scrollbar, #terror-container::-webkit-scrollbar {
-      display: none;
-    }
-    #aventura-container .movie-card, #accion-container .movie-card,
-    #comedia-container .movie-card, #terror-container .movie-card {
-      background: none;
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.2s;
-      flex: 0 0 auto;
-      width: 150px;
-    }
-    #aventura-container .movie-card:hover, #accion-container .movie-card:hover,
-    #comedia-container .movie-card:hover, #terror-container .movie-card:hover {
-      transform: scale(1.05);
-    }
-    #aventura-container .movie-card img, #accion-container .movie-card img,
-    #comedia-container .movie-card img, #terror-container .movie-card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
-    #aventura-container .movie-card .info, #accion-container .movie-card .info,
-    #comedia-container .movie-card .info, #terror-container .movie-card .info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 5px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    #aventura-container .movie-card .info h4, #accion-container .movie-card .info h4,
-    #comedia-container .movie-card .info h4, #terror-container .movie-card .info h4 {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #fff;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    }
-    #aventura-container .type-badge, #accion-container .type-badge,
-    #comedia-container .type-badge, #terror-container .type-badge {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background: rgba(0, 102, 204, 0.7);
-      color: white;
-      padding: 3px 6px;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      font-weight: bold;
     }
 
     /* ================= Sección Categorías (Menú Hamburguesa) ================= */
@@ -310,6 +119,7 @@
       background: #111;
       padding: 10px 20px;
       position: relative;
+      z-index: 10;
     }
     .header-top {
       display: flex;
@@ -419,7 +229,7 @@
       margin: 0;
       font-size: 0.9rem;
       color: #fff;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      text-shadow: -2px -2px 4px #000, 2px -2px 4px #000, -2px 2px 4px #000, 2px 2px 4px #000;
     }
     #category-results .type-badge {
       position: absolute;
@@ -431,26 +241,6 @@
       font-size: 0.7rem;
       border-radius: 4px;
       font-weight: bold;
-    }
-
-    /* ================= App Download ================= */
-    #app-download {
-      text-align: center;
-      padding: 20px;
-      background-color: #222;
-    }
-    #download-app {
-      font-size: 1.2rem;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border: 2px solid #fff;
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    #download-app:hover {
-      background-color: #fff;
-      color: #222;
     }
 
     /* ================= Footer ================= */
@@ -488,66 +278,62 @@
       <div class="hamburger-menu">
         <button id="hamburger-toggle">☰</button>
       </div>
-      <h1>Catálogo TeraBox</h1>
+      <h1><a href="index.html" style="color: inherit; text-decoration: none;">Catálogo TeraBox</a></h1>
       <div id="categories-menu"></div>
     </div>
     <div class="search-container">
-      <input type="text" id="search-bar" placeholder="Buscar película por nombre...">
+      <label for="search-bar" class="sr-only">Buscar película por nombre</label>
+      <input type="text" id="search-bar" placeholder="Buscar película por nombre..." aria-label="Buscar película por nombre">
     </div>
   </header>
-
-  <!-- Sección Resultados de Categorías -->
-  <section id="category-results" class="movies-grid"></section>
 
   <!-- Banner Slider -->
   <section id="banner"></section>
 
   <!-- Sección Estrenos -->
-  <section id="estrenos">
+  <section id="estrenos" class="movie-section">
     <h2>🎬 Estrenos 2025</h2>
-    <div id="estrenos-container"></div>
+    <div id="estrenos-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Agregado Recientemente -->
-  <section id="recently-added-section">
+  <section id="recently-added-section" class="movie-section">
     <h2>Agregado recientemente</h2>
-    <div id="recently-added-container"></div>
+    <div id="recently-added-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Series -->
-  <section id="series">
+  <section id="series" class="movie-section">
     <h2>Series</h2>
-    <div id="series-container"></div>
-  </section>
-
-  <!-- Sección Aventura -->
-  <section id="aventura">
-    <h2>Aventura</h2>
-    <div id="aventura-container"></div>
+    <div id="series-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Acción -->
-  <section id="accion">
+  <section id="accion" class="movie-section">
     <h2>Acción</h2>
-    <div id="accion-container"></div>
+    <div id="accion-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Ciencia Ficción -->
+  <section id="ciencia-ficcion" class="movie-section">
+    <h2>Ciencia Ficción</h2>
+    <div id="ciencia-ficcion-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Comedia -->
-  <section id="comedia">
+  <section id="comedia" class="movie-section">
     <h2>Comedia</h2>
-    <div id="comedia-container"></div>
+    <div id="comedia-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Terror -->
-  <section id="terror">
+  <section id="terror" class="movie-section">
     <h2>Terror</h2>
-    <div id="terror-container"></div>
+    <div id="terror-container" class="movie-container"></div>
   </section>
 
-  <!-- Sección Descargar App -->
-  <section id="app-download">
-    <a href="#" id="download-app">Descargar la App</a>
-  </section>
+  <!-- Sección Resultados de Categorías -->
+  <section id="category-results" class="movies-grid"></section>
 
   <!-- Footer -->
   <footer>
@@ -559,30 +345,46 @@
     let generoSeleccionado = null;
     let textoBusqueda = '';
 
-    // Normalizar texto
+    // Normalizar texto (eliminar tildes y convertir a minúsculas)
     function normalizeString(str) {
-      return str ? str.trim().toLowerCase() : '';
+      return str
+        ? str
+            .trim()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+        : '';
     }
 
     // Renderizar tarjetas de películas
-    function renderMovies(moviesArray, container, cardWidth = '150px') {
+    function renderMovies(moviesArray, container, cardWidth = '150px', useInfoBackground = false) {
       container.innerHTML = '';
       if (!moviesArray || moviesArray.length === 0) {
         container.innerHTML = '<p class="error-message">No se encontraron películas</p>';
         return;
       }
       moviesArray.forEach(p => {
-        if (!p || !p.ID || !p.NOMBRE || !p.IMG || !p.TIPO) return; // Validar campos
+        if (!p || !p.ID || !p.NOMBRE || !p.IMG || !p.TIPO) {
+          console.warn('Película inválida:', p);
+          return; // Validar campos
+        }
         const card = document.createElement('a');
         card.className = 'movie-card';
         card.href = `pelicula.html?id=${p.ID}`;
         card.style.width = cardWidth;
-        card.innerHTML = `
-          <span class="type-badge">${p.TIPO}</span>
-          <img src="${p.IMG}" alt="${p.NOMBRE}" onerror="this.src=''; this.parentElement.querySelector('.info h4').textContent='Imagen no disponible';">
-          <div class="info">
-            <h4>${p.NOMBRE}</h4>
-          </div>`;
+        if (useInfoBackground) {
+          card.innerHTML = `
+            <span class="type-badge">${p.TIPO}</span>
+            <img src="${p.IMG}" alt="${p.NOMBRE}" onerror="this.src=''; this.parentElement.querySelector('.info h4').textContent='Imagen no disponible';">
+            <div class="info">
+              <h4>${p.NOMBRE}</h4>
+            </div>`;
+        } else {
+          card.innerHTML = `
+            <span class="type-badge">${p.TIPO}</span>
+            <img src="${p.IMG}" alt="${p.NOMBRE}" onerror="this.src=''; this.parentElement.querySelector('h4').textContent='Imagen no disponible';">
+            <h4>${p.NOMBRE}</h4>`;
+        }
         container.appendChild(card);
       });
     }
@@ -590,37 +392,41 @@
     // Renderizar banner (todas las películas con FONDO)
     function renderBanner(movies) {
       const bannerContainer = document.getElementById('banner');
-      const bannerMovies = movies.filter(p => p && p.FONDO); // Use all movies with FONDO
+      const bannerMovies = movies.filter(p => p && p.FONDO && p.ID && p.NOMBRE); // Validar FONDO, ID y NOMBRE
       bannerContainer.innerHTML = '';
       if (bannerMovies.length === 0) {
+        console.warn('No hay películas con fondo para el banner');
         bannerContainer.style.display = 'none';
         return;
       }
       bannerMovies.forEach((p, index) => {
         const link = document.createElement('a');
         link.href = `pelicula.html?id=${p.ID}`;
+        link.className = index === 0 ? 'active' : '';
         const img = document.createElement('img');
         img.src = p.FONDO;
         img.alt = p.NOMBRE;
-        img.onerror = () => { img.src = ''; };
-        if (index === 0) img.classList.add('active');
+        img.onerror = () => { img.src = ''; img.alt = 'Imagen no disponible'; };
         link.appendChild(img);
         bannerContainer.appendChild(link);
+        console.log(`Banner link generado: href=${link.href}, alt=${p.NOMBRE}`);
       });
       let currentIndex = 0;
-      const images = bannerContainer.querySelectorAll('img');
-      setInterval(() => {
-        images[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % images.length;
-        images[currentIndex].classList.add('active');
-      }, 3000);
+      const links = bannerContainer.querySelectorAll('a');
+      if (links.length > 1) {
+        setInterval(() => {
+          links[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % links.length;
+          links[currentIndex].classList.add('active');
+        }, 3000);
+      }
     }
 
     // Renderizar estrenos (películas de 2025)
     function renderEstrenos(movies) {
       const container = document.getElementById('estrenos-container');
       const estrenos = movies.filter(p => p && (p.AÑO === 2025 || p.AÑO === '2025')); // Only 2025 movies
-      renderMovies(estrenos, container, '150px');
+      renderMovies(estrenos, container, '150px', false);
       autoScroll(container);
     }
 
@@ -628,7 +434,7 @@
     function renderRecentlyAdded(movies) {
       const container = document.getElementById('recently-added-container');
       const recent = movies.sort((a, b) => (b.ID || 0) - (a.ID || 0)).slice(0, 10); // Last 10 by ID
-      renderMovies(recent, container, '120px');
+      renderMovies(recent, container, '120px', false);
       autoScroll(container);
     }
 
@@ -640,31 +446,39 @@
         document.getElementById('series').style.display = 'none';
         return;
       }
-      renderMovies(series, container, '150px');
-      autoScroll(container);
-    }
-
-    // Renderizar aventura
-    function renderAventura(movies) {
-      const container = document.getElementById('aventura-container');
-      const aventura = movies.filter(p => p && p.GENERO && p.GENERO.split('/').map(g => normalizeString(g.trim())).includes('aventura'));
-      if (aventura.length === 0) {
-        document.getElementById('aventura').style.display = 'none';
-        return;
-      }
-      renderMovies(aventura, container, '150px');
+      renderMovies(series, container, '150px', false);
       autoScroll(container);
     }
 
     // Renderizar acción
     function renderAccion(movies) {
       const container = document.getElementById('accion-container');
-      const accion = movies.filter(p => p && p.GENERO && p.GENERO.split('/').map(g => normalizeString(g.trim())).includes('accion'));
+      const accion = movies.filter(p => {
+        if (!p || !p.GENERO) return false;
+        const genres = p.GENERO.split('/').map(g => normalizeString(g.trim()));
+        return genres.includes('accion');
+      });
       if (accion.length === 0) {
         document.getElementById('accion').style.display = 'none';
         return;
       }
-      renderMovies(accion, container, '150px');
+      renderMovies(accion, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar ciencia ficción
+    function renderCienciaFiccion(movies) {
+      const container = document.getElementById('ciencia-ficcion-container');
+      const cienciaFiccion = movies.filter(p => {
+        if (!p || !p.GENERO) return false;
+        const genres = p.GENERO.split('/').map(g => normalizeString(g.trim()));
+        return genres.includes('ciencia ficcion');
+      });
+      if (cienciaFiccion.length === 0) {
+        document.getElementById('ciencia-ficcion').style.display = 'none';
+        return;
+      }
+      renderMovies(cienciaFiccion, container, '150px', false);
       autoScroll(container);
     }
 
@@ -676,7 +490,7 @@
         document.getElementById('comedia').style.display = 'none';
         return;
       }
-      renderMovies(comedia, container, '150px');
+      renderMovies(comedia, container, '150px', false);
       autoScroll(container);
     }
 
@@ -688,7 +502,7 @@
         document.getElementById('terror').style.display = 'none';
         return;
       }
-      renderMovies(terror, container, '150px');
+      renderMovies(terror, container, '150px', false);
       autoScroll(container);
     }
 
@@ -752,15 +566,15 @@
         document.getElementById('estrenos'),
         document.getElementById('recently-added-section'),
         document.getElementById('series'),
-        document.getElementById('aventura'),
         document.getElementById('accion'),
+        document.getElementById('ciencia-ficcion'),
         document.getElementById('comedia'),
         document.getElementById('terror')
       ];
       const categoryResults = document.getElementById('category-results');
       if (textoBusqueda || generoSeleccionado !== null) {
         secciones.forEach(s => s.style.display = 'none');
-        renderMovies(filtradas, categoryResults, '150px');
+        renderMovies(filtradas, categoryResults, '150px', true);
       } else {
         secciones.forEach(s => s.style.display = '');
         categoryResults.innerHTML = '';
@@ -799,8 +613,8 @@
           renderEstrenos(todasLasPeliculas);
           renderRecentlyAdded(todasLasPeliculas);
           renderSeries(todasLasPeliculas);
-          renderAventura(todasLasPeliculas);
           renderAccion(todasLasPeliculas);
+          renderCienciaFiccion(todasLasPeliculas);
           renderComedia(todasLasPeliculas);
           renderTerror(todasLasPeliculas);
           document.getElementById('category-results').innerHTML = '';
@@ -811,27 +625,13 @@
         });
     });
 
-    // Desactivar clic derecho y teclas
-    document.addEventListener('contextmenu', e => e.preventDefault());
+    // Desactivar clic derecho y teclas, pero permitir clics en enlaces
+    document.addEventListener('contextmenu', e => {
+      if (!e.target.closest('a')) e.preventDefault();
+    });
     document.addEventListener('keydown', e => {
       if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
         e.preventDefault();
-      }
-    });
-
-    // Manejar descarga de app
-    document.getElementById('download-app').addEventListener('click', e => {
-      const install = confirm('¿Deseas descargar e instalar la app ahora?');
-      if (!install) e.preventDefault();
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-      const downloadSection = document.getElementById('app-download');
-      if (window.self !== window.top) {
-        downloadSection.style.display = 'none';
-      } else {
-        setTimeout(() => {
-          downloadSection.style.display = 'none';
-        }, 10000);
       }
     });
   </script>
