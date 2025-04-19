@@ -45,6 +45,17 @@
       height: 100%;
       object-fit: cover;
     }
+    .banner-title {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 1rem;
+      border-radius: 4px;
+      text-shadow: -2px -2px 4px #000, 2px -2px 4px #000, -2px 2px 4px #000, 2px 2px 4px #000;
+    }
 
     /* ================= Estilos Comunes para Secciones de Películas ================= */
     .movie-section {
@@ -97,7 +108,7 @@
       position: absolute;
       top: 5px;
       left: 5px;
-      background: rgba(0, 102, 204, 0.7);
+      background: rgba(204, 0, 0, 0.7);
       color: white;
       padding: 3px 6px;
       font-size: 0.7rem;
@@ -177,7 +188,7 @@
       background-color: #444;
     }
     .category-button.active {
-      background-color: #379ad3;
+      background-color: #d33737;
     }
     .search-container {
       display: flex;
@@ -235,7 +246,7 @@
       position: absolute;
       top: 5px;
       left: 5px;
-      background: rgba(0, 102, 204, 0.7);
+      background: rgba(204, 0, 0, 0.7);
       color: white;
       padding: 3px 6px;
       font-size: 0.7rem;
@@ -322,7 +333,7 @@
 
   <!-- Sección Comedia -->
   <section id="comedia" class="movie-section">
-    <h2>Comedia</h2>
+    <h2>Com glucagon Comedia</h2>
     <div id="comedia-container" class="movie-container"></div>
   </section>
 
@@ -403,11 +414,9 @@
         const link = document.createElement('a');
         link.href = `pelicula.html?id=${p.ID}`;
         link.className = index === 0 ? 'active' : '';
-        const img = document.createElement('img');
-        img.src = p.FONDO;
-        img.alt = p.NOMBRE;
-        img.onerror = () => { img.src = ''; img.alt = 'Imagen no disponible'; };
-        link.appendChild(img);
+        link.innerHTML = `
+          <img src="${p.FONDO}" alt="${p.NOMBRE}" onerror="this.src=''; this.alt='Imagen no disponible';">
+          <div class="banner-title">${p.NOMBRE}</div>`;
         bannerContainer.appendChild(link);
         console.log(`Banner link generado: href=${link.href}, alt=${p.NOMBRE}`);
       });
