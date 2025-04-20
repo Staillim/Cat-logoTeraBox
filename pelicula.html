@@ -93,6 +93,12 @@
     .boton-terabox:hover {
       background-color: #fb0c0c;
     }
+    .error-trailer {
+      text-align: center;
+      color: #ff5555;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -103,22 +109,29 @@
 
   <script>
     function getYouTubeEmbed(url) {
+      if (!url || typeof url !== 'string' || !url.trim()) {
+        return null; // No hay URL válida
+      }
       let videoId;
       if (url.includes("youtube.com/watch")) {
-        videoId = url.split("v=")[1].split("&")[0];
+        videoId = url.split("v=")[1]?.split("&")[0];
       } else if (url.includes("youtu.be/")) {
-        videoId = url.split("youtu.be/")[1].split("?")[0];
-      } else {
-        return url;
+        videoId = url.split("youtu.be/")[1]?.split("?")[0];
       }
-      return `https://www.youtube.com/embed/${videoId}`;
+      if (!videoId) {
+        return null; // No se pudo extraer el ID del video
+      }
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
     }
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
     fetch("https://raw.githubusercontent.com/Staillim/Mybase/main/base2.json")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         const pelicula = data.find(p => p.ID == id);
         const cont = document.getElementById("detalle");
@@ -132,9 +145,13 @@
 
         const embedUrl = getYouTubeEmbed(pelicula.TRAILER);
         const backgroundStyle = pelicula.FONDO ? `style="background-image: url('${pelicula.FONDO}');"` : '';
+        const trailerHtml = embedUrl
+          ? `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+          : `<p class="error-trailer">Tráiler no disponible</p>`;
+
         cont.innerHTML = `
           <a href="index.html" class="boton-back">← Volver al catálogo</a>
-          <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          ${trailerHtml}
           <div class="image-container" ${backgroundStyle}>
             <img src="${pelicula.IMG}" alt="${pelicula.NOMBRE}">
           </div>
@@ -151,7 +168,7 @@
           <a href="index.html" class="boton-back">← Volver al catálogo</a>
           <h2>Error cargando datos</h2>
         `;
-        console.error(err);
+        console.error('Error cargando datos:', err);
       });
   </script>
 
@@ -164,6 +181,5 @@
       }
     });
   </script>
-  <script src="js/main.js"></script>
 </body>
 </html>
