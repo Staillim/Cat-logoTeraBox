@@ -287,7 +287,7 @@
   <header>
     <div class="header-top">
       <div class="hamburger-menu">
-        <button id="hamburger-toggle">☰</button>
+        <button id="hamburger-toggle" aria-label="Abrir menú de categorías">☰</button>
       </div>
       <h1><a href="index.html" style="color: inherit; text-decoration: none;">Catálogo TeraBox</a></h1>
       <div id="categories-menu"></div>
@@ -333,7 +333,7 @@
 
   <!-- Sección Comedia -->
   <section id="comedia" class="movie-section">
-    <h2>Com glucagon Comedia</h2>
+    <h2>Comedia</h2>
     <div id="comedia-container" class="movie-container"></div>
   </section>
 
@@ -371,7 +371,7 @@
     function renderMovies(moviesArray, container, cardWidth = '150px', useInfoBackground = false) {
       container.innerHTML = '';
       if (!moviesArray || moviesArray.length === 0) {
-        container.innerHTML = '<p class="error-message">No se encontraron películas</p>';
+        container.innerHTML = '<p class="error-message">No se encontraron películas para este filtro</p>';
         return;
       }
       moviesArray.forEach(p => {
@@ -463,9 +463,8 @@
     function renderAccion(movies) {
       const container = document.getElementById('accion-container');
       const accion = movies.filter(p => {
-        if (!p || !p.GENERO) return false;
-        const genres = p.GENERO.split('/').map(g => normalizeString(g.trim()));
-        return genres.includes('accion');
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('accion');
       });
       if (accion.length === 0) {
         document.getElementById('accion').style.display = 'none';
@@ -479,9 +478,8 @@
     function renderCienciaFiccion(movies) {
       const container = document.getElementById('ciencia-ficcion-container');
       const cienciaFiccion = movies.filter(p => {
-        if (!p || !p.GENERO) return false;
-        const genres = p.GENERO.split('/').map(g => normalizeString(g.trim()));
-        return genres.includes('ciencia ficcion');
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('ciencia ficcion');
       });
       if (cienciaFiccion.length === 0) {
         document.getElementById('ciencia-ficcion').style.display = 'none';
@@ -494,7 +492,10 @@
     // Renderizar comedia
     function renderComedia(movies) {
       const container = document.getElementById('comedia-container');
-      const comedia = movies.filter(p => p && p.GENERO && p.GENERO.split('/').map(g => normalizeString(g.trim())).includes('comedia'));
+      const comedia = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('comedia');
+      });
       if (comedia.length === 0) {
         document.getElementById('comedia').style.display = 'none';
         return;
@@ -506,7 +507,10 @@
     // Renderizar terror
     function renderTerror(movies) {
       const container = document.getElementById('terror-container');
-      const terror = movies.filter(p => p && p.GENERO && p.GENERO.split('/').map(g => normalizeString(g.trim())).includes('terror'));
+      const terror = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('terror');
+      });
       if (terror.length === 0) {
         document.getElementById('terror').style.display = 'none';
         return;
@@ -535,16 +539,17 @@
       const cont = document.getElementById('categories-menu');
       const setG = new Set();
       movies.forEach(p => {
-        if (p && p.GENERO) {
+        if (p && p.GENERO && typeof p.GENERO === 'string') {
           p.GENERO.split('/').map(g => g.trim()).forEach(g => setG.add(g));
         }
       });
-      cont.innerHTML = `<button class="category-button active" data-genero="">Todas</button>`;
+      cont.innerHTML = `<button class="category-button" data-genero="">Todas</button>`;
       Array.from(setG).sort().forEach(g => {
-        cont.innerHTML += `<button class="category-button" data-genero="${g}">${g}</button>`;
+        cont.innerHTML += `<button class="category-button" data-genero="${normalizeString(g)}">${g}</button>`;
       });
       cont.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {
+          console.log('Categoría seleccionada:', btn.dataset.genero);
           if (generoSeleccionado === btn.dataset.genero) {
             generoSeleccionado = null; // Desactivar filtro
             cont.querySelectorAll('button').forEach(b => b.classList.remove('active'));
@@ -563,11 +568,15 @@
 
     // Aplicar filtros
     function aplicarFiltros() {
+      console.log('Aplicando filtros:', { textoBusqueda, generoSeleccionado });
       const filtradas = todasLasPeliculas.filter(p => {
-        if (!p || !p.NOMBRE || !p.GENERO) return false;
-        const okName = normalizeString(p.NOMBRE).includes(normalizeString(textoBusqueda));
-        const gens = p.GENERO.split('/').map(g => normalizeString(g.trim()));
-        const okGen = generoSeleccionado === null || generoSeleccionado === '' || gens.includes(normalizeString(generoSeleccionado));
+        if (!p || !p.NOMBRE || typeof p.NOMBRE !== 'string' || !p.GENERO_NORMALIZED) {
+          console.warn('Película con datos inválidos:', p);
+          return false;
+        }
+        const nombreNormalizado = normalizeString(p.NOMBRE);
+        const okName = textoBusqueda ? nombreNormalizado.includes(normalizeString(textoBusqueda)) : true;
+        const okGen = generoSeleccionado === null || generoSeleccionado === '' || p.GENERO_NORMALIZED.includes(generoSeleccionado);
         return okName && okGen;
       });
       const secciones = [
@@ -588,17 +597,23 @@
         secciones.forEach(s => s.style.display = '');
         categoryResults.innerHTML = '';
       }
-      console.log('Películas filtradas:', filtradas);
+      console.log('Películas filtradas:', filtradas.length);
     }
 
-    // Configurar buscador
+    // Configurar buscador con debounce
+    let debounceTimeout;
     document.getElementById('search-bar').addEventListener('input', e => {
+      console.log('Buscador input:', e.target.value);
+      clearTimeout(debounceTimeout);
       textoBusqueda = e.target.value;
-      aplicarFiltros();
+      debounceTimeout = setTimeout(() => {
+        aplicarFiltros();
+      }, 300);
     });
 
     // Configurar menú hamburguesa
     document.getElementById('hamburger-toggle').addEventListener('click', () => {
+      console.log('Menú hamburguesa clickeado');
       const menu = document.getElementById('categories-menu');
       menu.classList.toggle('active');
     });
@@ -617,6 +632,15 @@
             document.getElementById('category-results').innerHTML = '<p class="error-message">No se encontraron películas</p>';
             return;
           }
+          // Normalizar datos al cargar
+          todasLasPeliculas = todasLasPeliculas.map(p => ({
+            ...p,
+            NOMBRE: typeof p.NOMBRE === 'string' ? p.NOMBRE : '',
+            GENERO: typeof p.GENERO === 'string' ? p.GENERO : '',
+            GENERO_NORMALIZED: typeof p.GENERO === 'string'
+              ? p.GENERO.split('/').map(g => normalizeString(g.trim())).filter(g => g)
+              : []
+          }));
           renderCategories(todasLasPeliculas);
           renderBanner(todasLasPeliculas);
           renderEstrenos(todasLasPeliculas);
