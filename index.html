@@ -22,11 +22,14 @@
     #banner {
       position: relative;
       width: 100%;
-      height: 250px;
+      height: 350px; /* Altura aumentada para mejor impacto visual */
       overflow: hidden;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       z-index: 1;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 10px 10px;
     }
+
     #banner a {
       display: block;
       width: 100%;
@@ -36,25 +39,61 @@
       left: 0;
       text-decoration: none;
       display: none;
+      overflow: hidden; /* Asegura que el contenido no desborde */
     }
+
     #banner a.active {
       display: block;
     }
-    #banner img {
+
+    /* Contenedor de imagen principal */
+    .banner-image-container {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      overflow: hidden;
     }
+
+    /* Fondo difuminado */
+    .banner-background {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background-size: cover;
+      background-position: center;
+      filter: blur(15px) brightness(0.5);
+      z-index: 1;
+    }
+
+    /* Imagen principal centrada */
+    .banner-main-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      z-index: 2;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+    }
+
     .banner-title {
       position: absolute;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.6);
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.7);
       color: #fff;
-      padding: 5px 10px;
-      font-size: 1rem;
-      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      z-index: 3;
+      max-width: 80%;
       text-shadow: -2px -2px 4px #000, 2px -2px 4px #000, -2px 2px 4px #000, 2px 2px 4px #000;
+      backdrop-filter: blur(5px);
     }
 
     /* ================= Estilos Comunes para Secciones de Películas ================= */
@@ -287,7 +326,7 @@
   <header>
     <div class="header-top">
       <div class="hamburger-menu">
-        <button id="hamburger-toggle" aria-label="Abrir menú de categorías">☰</button>
+        <button id="hamburger-toggle" aria-label="Abrir menú de categorías"><i class="fas fa-bars"></i></button>
       </div>
       <h1><a href="index.html" style="color: inherit; text-decoration: none;">Catálogo TeraBox</a></h1>
       <div id="categories-menu"></div>
@@ -303,7 +342,7 @@
 
   <!-- Sección Estrenos -->
   <section id="estrenos" class="movie-section">
-    <h2>🎬 Estrenos 2025</h2>
+    <h2>🎬 Estrenos 2024-2025</h2>
     <div id="estrenos-container" class="movie-container"></div>
   </section>
 
@@ -341,6 +380,36 @@
   <section id="terror" class="movie-section">
     <h2>Terror</h2>
     <div id="terror-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Drama -->
+  <section id="drama" class="movie-section">
+    <h2>Drama</h2>
+    <div id="drama-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Aventura -->
+  <section id="aventura" class="movie-section">
+    <h2>Aventura</h2>
+    <div id="aventura-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Animación -->
+  <section id="animacion" class="movie-section">
+    <h2>Animación</h2>
+    <div id="animacion-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Romance -->
+  <section id="romance" class="movie-section">
+    <h2>Romance</h2>
+    <div id="romance-container" class="movie-container"></div>
+  </section>
+
+  <!-- Sección Suspense/Thriller -->
+  <section id="suspense" class="movie-section">
+    <h2>Suspense/Thriller</h2>
+    <div id="suspense-container" class="movie-container"></div>
   </section>
 
   <!-- Sección Resultados de Categorías -->
@@ -414,12 +483,19 @@
         const link = document.createElement('a');
         link.href = `pelicula.html?id=${p.ID}`;
         link.className = index === 0 ? 'active' : '';
+        
+        // Nuevo HTML con fondo difuminado y imagen principal
         link.innerHTML = `
-          <img src="${p.FONDO}" alt="${p.NOMBRE}" onerror="this.src=''; this.alt='Imagen no disponible';">
-          <div class="banner-title">${p.NOMBRE}</div>`;
+          <div class="banner-image-container">
+            <div class="banner-background" style="background-image: url('${p.FONDO}');"></div>
+            <img class="banner-main-image" src="${p.FONDO}" alt="${p.NOMBRE}" onerror="this.src=''; this.alt='Imagen no disponible';">
+            <div class="banner-title">${p.NOMBRE}</div>
+          </div>`;
+        
         bannerContainer.appendChild(link);
         console.log(`Banner link generado: href=${link.href}, alt=${p.NOMBRE}`);
       });
+      
       let currentIndex = 0;
       const links = bannerContainer.querySelectorAll('a');
       if (links.length > 1) {
@@ -431,10 +507,13 @@
       }
     }
 
-    // Renderizar estrenos (películas de 2025)
+    // Renderizar estrenos (películas de 2024-2025)
     function renderEstrenos(movies) {
       const container = document.getElementById('estrenos-container');
-      const estrenos = movies.filter(p => p && (p.AÑO === 2025 || p.AÑO === '2025')); // Only 2025 movies
+      const estrenos = movies.filter(p => p && (
+        p.AÑO === 2024 || p.AÑO === '2024' || 
+        p.AÑO === 2025 || p.AÑO === '2025'
+      )); // Películas de 2024 y 2025
       renderMovies(estrenos, container, '150px', false);
       autoScroll(container);
     }
@@ -519,6 +598,103 @@
       autoScroll(container);
     }
 
+    // Renderizar drama
+    function renderDrama(movies) {
+      const container = document.getElementById('drama-container');
+      const drama = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('drama');
+      });
+      if (drama.length === 0) {
+        document.getElementById('drama').style.display = 'none';
+        return;
+      }
+      renderMovies(drama, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar aventura
+    function renderAventura(movies) {
+      const container = document.getElementById('aventura-container');
+      const aventura = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('aventura');
+      });
+      if (aventura.length === 0) {
+        document.getElementById('aventura').style.display = 'none';
+        return;
+      }
+      renderMovies(aventura, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar animación
+    function renderAnimacion(movies) {
+      const container = document.getElementById('animacion-container');
+      const animacion = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('animacion') || 
+               p.GENERO_NORMALIZED.includes('animado') || 
+               p.GENERO_NORMALIZED.includes('infantil');
+      });
+      if (animacion.length === 0) {
+        document.getElementById('animacion').style.display = 'none';
+        return;
+      }
+      renderMovies(animacion, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar documental
+    function renderDocumental(movies) {
+      const container = document.getElementById('documental-container');
+      const documental = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('documental');
+      });
+      if (documental.length === 0) {
+        document.getElementById('documental').style.display = 'none';
+        return;
+      }
+      renderMovies(documental, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar romance
+    function renderRomance(movies) {
+      const container = document.getElementById('romance-container');
+      const romance = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('romance') || 
+               p.GENERO_NORMALIZED.includes('romantico') || 
+               p.GENERO_NORMALIZED.includes('romantica');
+      });
+      if (romance.length === 0) {
+        document.getElementById('romance').style.display = 'none';
+        return;
+      }
+      renderMovies(romance, container, '150px', false);
+      autoScroll(container);
+    }
+
+    // Renderizar suspense/thriller
+    function renderSuspense(movies) {
+      const container = document.getElementById('suspense-container');
+      const suspense = movies.filter(p => {
+        if (!p || !p.GENERO_NORMALIZED) return false;
+        return p.GENERO_NORMALIZED.includes('suspense') || 
+               p.GENERO_NORMALIZED.includes('thriller') || 
+               p.GENERO_NORMALIZED.includes('policiaco') || 
+               p.GENERO_NORMALIZED.includes('misterio');
+      });
+      if (suspense.length === 0) {
+        document.getElementById('suspense').style.display = 'none';
+        return;
+      }
+      renderMovies(suspense, container, '150px', false);
+      autoScroll(container);
+    }
+
     // Auto-scroll para contenedores
     function autoScroll(container) {
       if (container._autoScrollInterval || !container.firstElementChild) return;
@@ -587,7 +763,12 @@
         document.getElementById('accion'),
         document.getElementById('ciencia-ficcion'),
         document.getElementById('comedia'),
-        document.getElementById('terror')
+        document.getElementById('terror'),
+        document.getElementById('drama'),
+        document.getElementById('aventura'),
+        document.getElementById('animacion'),
+        document.getElementById('romance'),
+        document.getElementById('suspense')
       ];
       const categoryResults = document.getElementById('category-results');
       if (textoBusqueda || generoSeleccionado !== null) {
@@ -650,6 +831,11 @@
           renderCienciaFiccion(todasLasPeliculas);
           renderComedia(todasLasPeliculas);
           renderTerror(todasLasPeliculas);
+          renderDrama(todasLasPeliculas);
+          renderAventura(todasLasPeliculas);
+          renderAnimacion(todasLasPeliculas);
+          renderRomance(todasLasPeliculas);
+          renderSuspense(todasLasPeliculas);
           document.getElementById('category-results').innerHTML = '';
         })
         .catch(err => {
@@ -668,6 +854,5 @@
       }
     });
   </script>
-  <script type='text/javascript' src='//padsims.com/ec/5f/af/ec5fafa4122c3f73b7b5592f8b818d8b.js'></script>
 </body>
 </html>
