@@ -112,24 +112,20 @@
   </div>
 
   <script>
-    function getEmbedUrl(url) {
+    function getYouTubeEmbed(url) {
       if (!url || typeof url !== 'string' || !url.trim()) {
-        return null;
+        return null; // No hay URL válida
       }
-      // Si es YouTube, genera el embed
+      let videoId;
       if (url.includes("youtube.com/watch")) {
-        const videoId = url.split("v=")[1]?.split("&")[0];
-        if (!videoId) return null;
-        return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+        videoId = url.split("v=")[1]?.split("&")[0];
       } else if (url.includes("youtu.be/")) {
-        const videoId = url.split("youtu.be/")[1]?.split("?")[0];
-        if (!videoId) return null;
-        return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
-      } else if (url.includes("/embed/")) {
-        // Si ya es un enlace embed, úsalo directamente
-        return url;
+        videoId = url.split("youtu.be/")[1]?.split("?")[0];
       }
-      return null;
+      if (!videoId) {
+        return null; // No se pudo extraer el ID del video
+      }
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -151,7 +147,7 @@
           return;
         }
 
-        const embedUrl = getEmbedUrl(pelicula.TRAILER);
+        const embedUrl = getYouTubeEmbed(pelicula.TRAILER);
         const backgroundStyle = pelicula.FONDO ? `style="background-image: url('${pelicula.FONDO}');"` : '';
         const trailerHtml = embedUrl
           ? `<iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
@@ -159,13 +155,7 @@
 
         cont.innerHTML = `
           <a href="index.html" class="boton-back">← Volver al catálogo</a>
-          <div id="player-container">
-            ${trailerHtml}
-          </div>
-          <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-            <button id="btn-trailer" class="boton-terabox">Ver Tráiler</button>
-            <button id="btn-link" class="boton-terabox">Ver Pelicula</button>
-          </div>
+          ${trailerHtml}
           <div class="image-container" ${backgroundStyle}>
             <img src="${pelicula.IMG}" alt="${pelicula.NOMBRE}">
           </div>
@@ -174,14 +164,8 @@
             Año: ${pelicula.AÑO} | Duración: ${pelicula.DURACION}
           </div>
           <p>${pelicula.DESCRIPCION}</p>
+          <a href="${pelicula.LINK}" target="_blank" class="boton-terabox">Ver en TeraBox</a>
         `;
-        // Script para alternar el reproductor
-        document.getElementById('btn-trailer').onclick = function() {
-          document.getElementById('player-container').innerHTML = trailerHtml;
-        };
-        document.getElementById('btn-link').onclick = function() {
-          document.getElementById('player-container').innerHTML = pelicula.LINK ? `<iframe src="${pelicula.LINK}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : `<p class='error-trailer'>Link no disponible</p>`;
-        };
       })
       .catch(err => {
         document.getElementById("detalle").innerHTML = `

@@ -67,22 +67,14 @@ header {
 }
 
 .movie-container {
+  display: flex;
   overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-  cursor: grab;
-  height: 260px; /* Ajusta según el alto de tus tarjetas */
+  flex-wrap: nowrap;
+  gap: 20px;
+  padding: 15px 5px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.movie-card {
-  display: inline-block;
-  vertical-align: top;
-}
-.movie-container:active {
-  cursor: grabbing;
-}
-
 
 .movie-card {
   background: rgba(30, 30, 45, 0.5);
